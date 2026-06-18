@@ -55,6 +55,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AddDestinationCommand.cs" />
+    <Compile Include="Commands\AddVisitCommand.cs" />
+    <Compile Include="Commands\DeleteDestinationCommand.cs" />
+    <Compile Include="Commands\DeleteVisitCommand.cs" />
+    <Compile Include="Commands\DestinationCommand.cs" />
+    <Compile Include="Commands\EditDestinationCommand.cs" />
+    <Compile Include="Commands\EditVisitCommand.cs" />
+    <Compile Include="Commands\VisitCommand.cs" />
+    <Compile Include="Helpers\FileLogger.cs" />
+    <Compile Include="Interfaces\IUndoableCommand.cs" />
+    <Compile Include="Interfaces\IDestinationRepository.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IObserver.cs" />
+    <Compile Include="Interfaces\IVisitRepository.cs" />
+    <Compile Include="Repositories\DestinationRepository.cs" />
+    <Compile Include="Repositories\JsonDestinationRepository.cs" />
+    <Compile Include="Repositories\JsonVisitRepository.cs" />
+    <Compile Include="Repositories\VisitRepository.cs" />
+    <Compile Include="Repositories\XmlDestinationRepository.cs" />
+    <Compile Include="Repositories\XmlVisitRepository.cs" />
+    <Compile Include="Services\ChartDisplay.cs" />
+    <Compile Include="Services\CommandManager.cs" />
+    <Compile Include="Services\TextDisplay.cs" />
+    <Compile Include="Services\VisitTracker.cs" />
+    <Compile Include="States\DeclineState.cs" />
+    <Compile Include="States\OffSeasonState.cs" />
+    <Compile Include="States\PopularState.cs" />
+    <Compile Include="States\StableState.cs" />
+    <Compile Include="States\VisitState.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,6 +98,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\DestinationVisit.cs" />
+    <Compile Include="Models\TouristDestination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -93,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+    <Folder Include="View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
