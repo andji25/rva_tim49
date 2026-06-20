@@ -1,39 +1,47 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TouristDestinations_Component1.Interfaces;
+using TouristDestinations_Component1.Models;
 
-namespace TouristDestinations
+namespace TouristDestinations_Component1.Repositories
 {
     public abstract class VisitRepository : IVisitRepository
     {
-        public void Add(DestinationVisit visit)
+        protected List<DestinationVisit> visits;
+
+        public VisitRepository()
         {
-            throw new NotImplementedException();
+            visits = new List<DestinationVisit>();
         }
 
-        public void Delete(Guid id)
+        public void Add(DestinationVisit visit)
         {
-            throw new NotImplementedException();
+            visits.Add(visit);
+            Save();
+        }
+
+        public void Delete(Guid destinationId, DateTime dateOfVisit)
+        {
+            visits.RemoveAll(v => v.DestinationId == destinationId && v.DateOfVisit == dateOfVisit);
+            Save();
         }
 
         public void Edit(DestinationVisit visit)
         {
-            throw new NotImplementedException();
+            int index = visits.FindIndex(v => v.DestinationId == visit.DestinationId);
+            if (index != -1) {
+                visits[index] = visit;
+                Save();
+            }
         }
 
         public List<DestinationVisit> GetAll()
         {
-            throw new NotImplementedException();
+            return visits;
         }
 
-        public void Load()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Load();
+        public abstract void Save();
     }
 }

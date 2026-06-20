@@ -1,41 +1,59 @@
 using System;
+using System.Xml.Serialization;
 using TouristDestinations_Component1.States;
 
 namespace TouristDestinations_Component1.Models
 {
     public class DestinationVisit
     {
-        private Guid destinationId;
-        private DateTime dateOfVisit;
-        private int numberOfVisitors;
-        private int durationOfVisit;
-        private double revenue;
-        private VisitState state;
+        public Guid DestinationId { get; private set; }
+        public DateTime DateOfVisit { get; private set; }
+        public int NumberOfVisitors { get; private set; }
+        public int DurationOfVisit { get; private set; }
+        public double Revenue { get; private set; }
+        public VisitStateType StateType { get; private set; }
 
-        public Guid DestinationId => destinationId;
-        public DateTime DateOfVisit => dateOfVisit;
-        public int NumberOfVisitors => numberOfVisitors;
-        public int DurationOfVisit => durationOfVisit;
-        public double Revenue => revenue;
+        [XmlIgnore]
+        public VisitState State { get; private set; }
+
+        public DestinationVisit()
+        {
+        }
 
         public DestinationVisit(Guid destinationId, DateTime dateOfVisit, int numberOfVisitors, int durationOfVisit, double revenue)
         {
-            this.destinationId = destinationId;
-            this.dateOfVisit = dateOfVisit;
-            this.numberOfVisitors = numberOfVisitors;
-            this.durationOfVisit = durationOfVisit;
-            this.revenue = revenue;
-            this.state = new PopularState(this);
+            DestinationId = destinationId;
+            DateOfVisit = dateOfVisit;
+            NumberOfVisitors = numberOfVisitors;
+            DurationOfVisit = durationOfVisit;
+            Revenue = revenue;
+            State = new PopularState(this);
+            StateType = VisitStateType.Popular;
         }
 
         public void SetState(VisitState newState)
         {
-            state = newState;
+            State = newState;
+            switch (newState)
+            {
+                case PopularState _:
+                    StateType = VisitStateType.Popular;
+                    break;
+                case StableState _:
+                    StateType = VisitStateType.Stable;
+                    break;
+                case DeclineState _:
+                    StateType = VisitStateType.Decline;
+                    break;
+                case OffSeasonState _:
+                    StateType = VisitStateType.OffSeason;
+                    break;
+            }
         }
 
         public void ChangeState()
         {
-            state.ChangeState();
+            State.ChangeState();
         }
     }
 }

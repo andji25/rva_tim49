@@ -38,7 +38,6 @@ namespace TouristDestinations_Component1.Services
 		public void AddVisit(DestinationVisit visit)
 		{
             visits.Add(visit);
-            repository.Add(visit);
             NotifyObservers();
         }
 	}

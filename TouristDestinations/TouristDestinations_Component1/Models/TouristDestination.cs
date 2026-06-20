@@ -4,27 +4,22 @@ namespace TouristDestinations_Component1.Models
 {
     public class TouristDestination
     {
-        private Guid id;
-        private string name;
-        private string country;
-        private string type;
-
-        public Guid Id => id;
-        public string Name => name;
-        public string Country => country;
-        public string Type => type;
+        public Guid Id { get; private set; }
+        public string Name { get; private set; }
+        public string Country { get; private set; }
+        public string Type { get; private set; }
 
         public TouristDestination()
         {
-            id = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
 
         public TouristDestination(string name, string country, string type)
         {
-            id = Guid.NewGuid();
-            this.name = name;
-            this.country = country;
-            this.type = type;
+            Id = Guid.NewGuid();
+            Name = name;
+            Country = country;
+            Type = type;
         }
     }
 }
