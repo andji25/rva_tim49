@@ -73,6 +73,13 @@ namespace TouristDestinations_Component1.ViewModels
             set => SetProperty(ref inputDateOfVisit, value);
         }
 
+        private string statusMessage;
+        public string StatusMessage
+        {
+            get => statusMessage;
+            set => SetProperty(ref statusMessage, value);
+        }
+
         public MyICommand AddCommand { get; set; }
         public MyICommand EditCommand { get; set; }
         public MyICommand DeleteCommand { get; set; }

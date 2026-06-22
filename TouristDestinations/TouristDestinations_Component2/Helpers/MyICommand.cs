@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace TouristDestinations_Component1.Helpers
+namespace TouristDestinations_Component2.Helpers
 {
     public class MyICommand : ICommand
     {

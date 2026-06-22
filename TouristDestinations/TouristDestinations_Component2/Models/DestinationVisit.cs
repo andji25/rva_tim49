@@ -1,9 +1,7 @@
 using System;
-using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using TouristDestinations_Component1.States;
 
-namespace TouristDestinations_Component1.Models
+namespace TouristDestinations_Component2.Models
 {
     [DataContract]
     public class DestinationVisit
@@ -21,9 +19,6 @@ namespace TouristDestinations_Component1.Models
         [DataMember]
         public VisitStateType StateType { get; private set; }
 
-        [XmlIgnore]
-        public VisitState State { get; private set; }
-
         public DestinationVisit()
         {
         }
@@ -35,33 +30,7 @@ namespace TouristDestinations_Component1.Models
             NumberOfVisitors = numberOfVisitors;
             DurationOfVisit = durationOfVisit;
             Revenue = revenue;
-            State = new PopularState(this);
             StateType = VisitStateType.Popular;
-        }
-
-        public void SetState(VisitState newState)
-        {
-            State = newState;
-            switch (newState)
-            {
-                case PopularState _:
-                    StateType = VisitStateType.Popular;
-                    break;
-                case StableState _:
-                    StateType = VisitStateType.Stable;
-                    break;
-                case DeclineState _:
-                    StateType = VisitStateType.Decline;
-                    break;
-                case OffSeasonState _:
-                    StateType = VisitStateType.OffSeason;
-                    break;
-            }
-        }
-
-        public void ChangeState()
-        {
-            State.ChangeState();
         }
     }
 }

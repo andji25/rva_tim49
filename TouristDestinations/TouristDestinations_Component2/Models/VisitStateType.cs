@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace TouristDestinations_Component1.Models
+namespace TouristDestinations_Component2.Models
 {
     [DataContract]
     public enum VisitStateType

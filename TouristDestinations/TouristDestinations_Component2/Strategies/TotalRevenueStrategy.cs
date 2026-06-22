@@ -1,20 +1,21 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using TouristDestinations_Component2.Interfaces;
+using TouristDestinations_Component2.Models;
 
-namespace TouristDestinations_Component2.Stategies
+namespace TouristDestinations_Component2.Strategies
 {
-	public class TotalRevenueStrategy : IStatisticsStrategy
-	{
-		public TotalRevenueStrategy()
-		{
-			throw new NotImplementedException();
-		}
-
-		public string Calculate(Dictionary<string, List<DestinationVisit>> data)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    public class TotalRevenueStrategy : IStatisticsStrategy
+    {
+        public string Calculate(Dictionary<string, List<DestinationVisit>> data)
+        {
+            string result = "Total Revenue per Destination:\n";
+            foreach (var entry in data)
+            {
+                double total = entry.Value.Sum(v => v.Revenue);
+                result += $"{entry.Key}: {total:C}\n";
+            }
+            return result;
+        }
+    }
 }

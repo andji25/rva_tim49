@@ -1,29 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TouristDestinations_Component2.Interfaces;
 
 namespace TouristDestinations_Component2.Services
 {
-	public class StatisticsService
-	{
-		IStatisticsStrategy strategy;
-		IVisitData visitData;
-		IWriter writer;
+    public class StatisticsService
+    {
+        private IStatisticsStrategy strategy;
+        private IVisitData visitData;
+        private IWriter writer;
 
-		public void SetStrategy(IStatisticsStrategy strategy)
-		{
-			throw new NotImplementedException();
-		}
+        public StatisticsService(IVisitData visitData, IWriter writer)
+        {
+            this.visitData = visitData;
+            this.writer = writer;
+        }
 
-		public string Calculate(Guid destinationId, DateTime from, DateTime to)
-		{
-			throw new NotImplementedException();
-		}
+        public void SetStrategy(IStatisticsStrategy strategy)
+        {
+            this.strategy = strategy;
+        }
 
-		public void WriteResults(string results)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public string Calculate()
+        {
+            var data = visitData.GetData();
+            return strategy.Calculate(data);
+        }
+
+        public void WriteResults(string results)
+        {
+            writer.Write(results);
+        }
+    }
 }

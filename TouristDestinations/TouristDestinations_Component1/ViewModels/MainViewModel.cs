@@ -1,14 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ServiceModel;
 using TouristDestinations_Component1.Helpers;
 using TouristDestinations_Component1.Interfaces;
 using TouristDestinations_Component1.Models;
 using TouristDestinations_Component1.Repositories;
 using TouristDestinations_Component1.Services;
+using TouristDestinations_Component1.WCF;
 
 namespace TouristDestinations_Component1.ViewModels
 {
     public class MainViewModel : BindableBase
     {
+        private ServiceHost serviceHost;
         public DestinationViewModel DestinationViewModel { get; set; }
         public VisitViewModel VisitViewModel { get; set; }
 
@@ -25,10 +29,32 @@ namespace TouristDestinations_Component1.ViewModels
             set => SetProperty(ref selectedFormat, value);
         }
 
+        public ChartViewModel ChartViewModel { get; set; }
+
+        public MyICommand LoadCommand { get; set; }
+        public MyICommand SaveCommand { get; set; }
+        public MyICommand<string> SelectFormatCommand { get; set; }
+
         public MainViewModel()
         {
             ILogger logger = new FileLogger("log.txt");
             commandManager = new CommandManager(logger);
+            SelectedFormat = "XML";
+
+            LoadCommand = new MyICommand(Load);
+            SaveCommand = new MyICommand(Save);
+            SelectFormatCommand = new MyICommand<string>(OnSelectFormat);
+        }
+
+        private void OnSelectFormat(string format)
+        {
+            SelectedFormat = format;
+        }
+
+        public void Save()
+        {
+            destinationRepository?.Save();
+            visitRepository?.Save();
         }
 
         public void Load()
@@ -49,6 +75,18 @@ namespace TouristDestinations_Component1.ViewModels
 
             DestinationViewModel = new DestinationViewModel(destinationRepository, commandManager);
             VisitViewModel = new VisitViewModel(visitRepository, destinationRepository, commandManager, visitTracker);
+            ChartViewModel = new ChartViewModel();
+
+            IObserver chartDisplay = new ChartDisplay(visitRepository, ChartViewModel);
+            IObserver textDisplay = new TextDisplay(VisitViewModel);
+            visitTracker.Register(chartDisplay);
+            visitTracker.Register(textDisplay);
+            
+            OnPropertyChanged(nameof(DestinationViewModel));
+            OnPropertyChanged(nameof(VisitViewModel));
+            OnPropertyChanged(nameof(ChartViewModel));
+
+            StartWcfService();
         }
 
         private void SeedIfEmpty()
@@ -67,6 +105,21 @@ namespace TouristDestinations_Component1.ViewModels
                 visitRepository.Add(new DestinationVisit(destinations[1].Id, System.DateTime.Now.AddDays(-10), 45, 2, 800.0));
                 visitRepository.Add(new DestinationVisit(destinations[2].Id, System.DateTime.Now.AddDays(-20), 80, 5, 1500.0));
             }
+        }
+
+        private void StartWcfService()
+        {
+            serviceHost = new ServiceHost(new VisitService(visitRepository, destinationRepository),
+                                          new Uri("http://localhost:8080/VisitService"));
+            serviceHost.AddServiceEndpoint(typeof(IVisitService),
+                                           new BasicHttpBinding(),
+                                           "http://localhost:8080/VisitService");
+            serviceHost.Open();
+        }
+
+        public void StopWcfService()
+        {
+            serviceHost?.Close();
         }
     }
 }

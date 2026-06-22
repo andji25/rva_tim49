@@ -37,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -56,10 +58,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Adapter\VisitAdapter.cs" />
+    <Compile Include="Helpers\BindableBase.cs" />
+    <Compile Include="Helpers\MyICommand.cs" />
+    <Compile Include="Models\DestinationVisit.cs" />
+    <Compile Include="Models\TouristDestination.cs" />
+    <Compile Include="Models\VisitStateType.cs" />
     <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="Strategies\LowestVisitorsStrategy.cs" />
     <Compile Include="Strategies\OffSeasonCountStrategy.cs" />
     <Compile Include="Strategies\TotalRevenueStrategy.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="WCF\IVisitService.cs" />
+    <Compile Include="WCF\VisitServiceClient.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,10 +113,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
