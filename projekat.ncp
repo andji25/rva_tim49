@@ -1,0 +1,743 @@
+<Project>
+  <Name>TouristDestinations</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>TouristDestinations</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Interface">
+        <Name>IUndoableCommand</Name>
+        <Access>Public</Access>
+        <Location left="377" top="549" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Execute()</Member>
+        <Member type="Method">void Undo()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>AddDestinationCommand</Name>
+        <Access>Public</Access>
+        <Location left="242" top="950" />
+        <Size width="181" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public AddDestinationCommand()</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>EditDestinationCommand</Name>
+        <Access>Public</Access>
+        <Location left="439" top="950" />
+        <Size width="176" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public EditDestinationCommand()</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DeleteDestinationCommand</Name>
+        <Access>Public</Access>
+        <Location left="626" top="950" />
+        <Size width="191" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public DeleteDestinationCommand()</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DestinationCommand</Name>
+        <Access>Public</Access>
+        <Location left="564" top="640" />
+        <Size width="198" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected TouristDestination destination</Member>
+        <Member type="Field">protected IDestinationRepository repository</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>CommandManager</Name>
+        <Access>Public</Access>
+        <Location left="10" top="590" />
+        <Size width="308" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">Stack&lt;IUndoableCommand&gt; undoStack</Member>
+        <Member type="Field">Stack&lt;IUndoableCommand&gt; redoStack</Member>
+        <Member type="Field">ILogger logger</Member>
+        <Member type="Method">public void ExecuteCommand(IUndoableCommand command)</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Member type="Method">public void Redo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>VisitCommand</Name>
+        <Access>Public</Access>
+        <Location left="782" top="640" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected DestinationVisit visit</Member>
+        <Member type="Field">protected IVisitRepository repository</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>EditVisitCommand</Name>
+        <Access>Public</Access>
+        <Location left="1014" top="950" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public EditVisitCommand()</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>AddVisitCommand</Name>
+        <Access>Public</Access>
+        <Location left="835" top="950" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public AddVisitCommand()</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IDestinationRepository</Name>
+        <Access>Public</Access>
+        <Location left="1257" top="376" />
+        <Size width="240" height="164" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Add(TouristDestination destination)</Member>
+        <Member type="Method">void Edit(TouristDestination destination)</Member>
+        <Member type="Method">void Delete(Guid id)</Member>
+        <Member type="Method">List&lt;TouristDestination&gt; GetAll()</Member>
+        <Member type="Method">void Load()</Member>
+        <Member type="Method">void Save()</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IVisitRepository</Name>
+        <Access>Public</Access>
+        <Location left="1014" top="376" />
+        <Size width="226" height="164" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Add(DestinationVisit visit)</Member>
+        <Member type="Method">void Edit(DestinationVisit visit)</Member>
+        <Member type="Method">void Delete(Guid destinationId, DateTime dateOfVisit)</Member>
+        <Member type="Method">List&lt;DestinationVisit&gt; GetAll()</Member>
+        <Member type="Method">void Load()</Member>
+        <Member type="Method">void Save()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>XmlDestinationRepository</Name>
+        <Access>Public</Access>
+        <Location left="1448" top="596" />
+        <Size width="162" height="89" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>JsonDestinationRepository</Name>
+        <Access>Public</Access>
+        <Location left="1448" top="719" />
+        <Size width="162" height="93" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>XmlVisitRepository</Name>
+        <Access>Public</Access>
+        <Location left="801" top="376" />
+        <Size width="162" height="95" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>JsonVisitRepository</Name>
+        <Access>Public</Access>
+        <Location left="801" top="490" />
+        <Size width="162" height="95" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DeleteVisitCommand</Name>
+        <Access>Public</Access>
+        <Location left="1188" top="950" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public DeleteVisitCommand()</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DestinationRepository</Name>
+        <Access>Public</Access>
+        <Location left="1232" top="611" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected List&lt;TouristDestination&gt; destinations</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>VisitRepository</Name>
+        <Access>Public</Access>
+        <Location left="1034" top="611" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected List&lt;DestinationVisit&gt; visits</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DestinationVisit</Name>
+        <Access>Public</Access>
+        <Location left="512" top="270" />
+        <Size width="211" height="230" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">Guid destinationId</Member>
+        <Member type="Field">DateTime dateOfVisit</Member>
+        <Member type="Field">int numberOfVisitors</Member>
+        <Member type="Field">int durationOfVisit</Member>
+        <Member type="Field">double revenue</Member>
+        <Member type="Field">VisitState state</Member>
+        <Member type="Constructor">public DestinationVisit()</Member>
+        <Member type="Method">public void SetState(VisitState newState)</Member>
+        <Member type="Method">public void ChangeState()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>VisitState</Name>
+        <Access>Public</Access>
+        <Location left="239" top="237" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected DestinationVisit visit</Member>
+        <Member type="Method">public void ChangeState()</Member>
+        <Member type="Method">protected void CheckState()</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>PopularState</Name>
+        <Access>Public</Access>
+        <Location left="24" top="24" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public PopularState()</Member>
+        <Member type="Method">public void ChangeState()</Member>
+        <Member type="Method">protected void CheckState()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StableState</Name>
+        <Access>Public</Access>
+        <Location left="24" top="159" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public StableState()</Member>
+        <Member type="Method">public void ChangeState()</Member>
+        <Member type="Method">protected void CheckState()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DeclineState</Name>
+        <Access>Public</Access>
+        <Location left="24" top="295" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public DeclineState()</Member>
+        <Member type="Method">public void ChangeState()</Member>
+        <Member type="Method">protected void CheckState()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>OffSeasonState</Name>
+        <Access>Public</Access>
+        <Location left="24" top="437" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public OffSeasonState()</Member>
+        <Member type="Method">public void ChangeState()</Member>
+        <Member type="Method">protected void CheckState()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>TouristDestination</Name>
+        <Access>Public</Access>
+        <Location left="1727" top="628" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">Guid id</Member>
+        <Member type="Field">string name</Member>
+        <Member type="Field">string country</Member>
+        <Member type="Field">string type</Member>
+        <Member type="Constructor">public TouristDestination()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>VisitTracker</Name>
+        <Access>Public</Access>
+        <Location left="1102" top="70" />
+        <Size width="223" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">List&lt;IObserver&gt; observers</Member>
+        <Member type="Field">List&lt;DestinationVisit&gt; visits</Member>
+        <Member type="Field">IVisitRepository repository</Member>
+        <Member type="Method">public void Register(IObserver observer)</Member>
+        <Member type="Method">public void Unregister(IObserver observer)</Member>
+        <Member type="Method">public void NotifyObservers()</Member>
+        <Member type="Method">public void AddVisit(DestinationVisit visit)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IObserver</Name>
+        <Access>Public</Access>
+        <Location left="770" top="15" />
+        <Size width="213" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Update(DestinationVisit visit)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>ChartDisplay</Name>
+        <Access>Public</Access>
+        <Location left="501" top="10" />
+        <Size width="210" height="94" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void Update(DestinationVisit visit)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>TextDisplay</Name>
+        <Access>Public</Access>
+        <Location left="501" top="117" />
+        <Size width="205" height="94" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void Update(DestinationVisit visit)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>ILogger</Name>
+        <Access>Public</Access>
+        <Location left="24" top="902" />
+        <Size width="162" height="101" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Log(string message)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>FileLogger</Name>
+        <Access>Public</Access>
+        <Location left="24" top="1081" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">string path</Member>
+        <Member type="Constructor">public FileLogger()</Member>
+        <Member type="Method">public void Log(string message)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IVisitData</Name>
+        <Access>Public</Access>
+        <Location left="1550" top="58" />
+        <Size width="298" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">Dictionary&lt;string, List&lt;DestinationVisit&gt;&gt; GetData()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>VisitAdapter</Name>
+        <Access>Public</Access>
+        <Location left="1550" top="329" />
+        <Size width="298" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">List&lt;DestinationVisit&gt; visits</Member>
+        <Member type="Constructor">public VisitAdapter()</Member>
+        <Member type="Method">public Dictionary&lt;string, List&lt;DestinationVisit&gt;&gt; GetData()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IStatisticsStrategy</Name>
+        <Access>Public</Access>
+        <Location left="1919" top="69" />
+        <Size width="356" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">string Calculate(Dictionary&lt;string, List&lt;DestinationVisit&gt;&gt; data)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>LowestVisitorsStrategy</Name>
+        <Access>Public</Access>
+        <Location left="2361" top="22" />
+        <Size width="353" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public LowestVisitorsStrategy()</Member>
+        <Member type="Method">public string Calculate(Dictionary&lt;string, List&lt;DestinationVisit&gt;&gt; data)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>TotalRevenueStrategy</Name>
+        <Access>Public</Access>
+        <Location left="2361" top="145" />
+        <Size width="353" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public TotalRevenueStrategy()</Member>
+        <Member type="Method">public string Calculate(Dictionary&lt;string, List&lt;DestinationVisit&gt;&gt; data)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>OffSeasonCountStrategy</Name>
+        <Access>Public</Access>
+        <Location left="2361" top="270" />
+        <Size width="353" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public OffSeasonCountStrategy()</Member>
+        <Member type="Method">public string Calculate(Dictionary&lt;string, List&lt;DestinationVisit&gt;&gt; data)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatisticsService</Name>
+        <Access>Public</Access>
+        <Location left="1955" top="401" />
+        <Size width="365" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">IStatisticsStrategy strategy</Member>
+        <Member type="Field">IVisitData visitData</Member>
+        <Member type="Field">IWriter writer</Member>
+        <Member type="Method">public void SetStrategy(IStatisticsStrategy strategy)</Member>
+        <Member type="Method">public string Calculate(Guid destinationId, DateTime from, DateTime to)</Member>
+        <Member type="Method">public void WriteResults(string results)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IWriter</Name>
+        <Access>Public</Access>
+        <Location left="2440" top="419" />
+        <Size width="162" height="78" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Write(string result)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>CsvWriter</Name>
+        <Access>Public</Access>
+        <Location left="2440" top="541" />
+        <Size width="162" height="128" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">string path</Member>
+        <Member type="Constructor">public CsvWriter()</Member>
+        <Member type="Method">public void Write(string result)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Realization" first="4" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>539</X>
+          <Y>838</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>462</X>
+          <Y>802</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="3" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="2" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>605</X>
+          <Y>924</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="1" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>332</X>
+          <Y>929</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>578</X>
+          <Y>920</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="6" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>798</X>
+          <Y>608</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="8" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>854</X>
+          <Y>925</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="5" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>357</X>
+          <Y>710</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="7" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="15" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="16" second="9">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="17" second="10">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="12" second="16">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1423</X>
+          <Y>746</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1419</X>
+          <Y>746</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="11" second="16">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1423</X>
+          <Y>640</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1428</X>
+          <Y>640</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="14" second="17">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>959</X>
+          <Y>610</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>995</X>
+          <Y>748</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="18" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="20" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>211</X>
+          <Y>132</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>261</X>
+          <Y>207</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="21" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>211</X>
+          <Y>260</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>214</X>
+          <Y>260</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="22" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>211</X>
+          <Y>362</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>214</X>
+          <Y>362</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="23" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>227</X>
+          <Y>494</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>260</X>
+          <Y>481</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="27" second="26">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>736</X>
+          <Y>51</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="28" second="26">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>762</X>
+          <Y>161</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="25" second="26">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1057</X>
+          <Y>110</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1008</X>
+          <Y>82</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="25" second="18">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>774</X>
+          <Y>270</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>748</X>
+          <Y>345</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="25" second="10">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1125</X>
+          <Y>313</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="13" second="17">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>985</X>
+          <Y>639</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1009</X>
+          <Y>648</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="5" second="29">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>106</X>
+          <Y>862</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="30" second="29">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="32" second="31">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="34" second="33">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="35" second="33">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="36" second="33">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>2300</X>
+          <Y>240</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="37" second="31">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1879</X>
+          <Y>487</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1873</X>
+          <Y>226</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="37" second="33">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="39" second="38">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>2516</X>
+          <Y>522</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="37" second="38">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="32" second="18">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1525</X>
+          <Y>356</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
