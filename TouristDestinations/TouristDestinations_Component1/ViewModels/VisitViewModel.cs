@@ -24,7 +24,18 @@ namespace TouristDestinations_Component1.ViewModels
         public DestinationVisit SelectedVisit
         {
             get => selectedVisit;
-            set => SetProperty(ref selectedVisit, value);
+            set
+            {
+                SetProperty(ref selectedVisit, value);
+                if (value != null)
+                {
+                    SelectedDestination = Destinations.FirstOrDefault(d => d.Id == value.DestinationId);
+                    InputDateOfVisit = value.DateOfVisit;
+                    InputNumberOfVisitors = value.NumberOfVisitors;
+                    InputDurationOfVisit = value.DurationOfVisit;
+                    InputRevenue = value.Revenue;
+                }
+            }
         }
 
         private TouristDestination selectedDestination;
@@ -105,12 +116,6 @@ namespace TouristDestinations_Component1.ViewModels
             RedoCommand = new MyICommand(OnRedo);
         }
 
-        public void Refresh(IVisitRepository repository)
-        {
-            this.repository = repository;
-            Visits = new ObservableCollection<DestinationVisit>(repository.GetAll());
-            OnPropertyChanged(nameof(Visits));
-        }
 
         private void Search()
         {
@@ -147,9 +152,13 @@ namespace TouristDestinations_Component1.ViewModels
         {
             if (SelectedVisit == null || !Validate()) return;
             var oldVisit = SelectedVisit;
-            var newVisit = new DestinationVisit(SelectedDestination.Id, InputDateOfVisit, InputNumberOfVisitors, InputDurationOfVisit, InputRevenue);
+            var newVisit = new DestinationVisit(oldVisit.DestinationId, InputDateOfVisit, InputNumberOfVisitors, InputDurationOfVisit, InputRevenue);
             commandManager.ExecuteCommand(new EditVisitCommand(newVisit, oldVisit, repository));
-            Refresh(repository);
+
+            int index = Visits.IndexOf(oldVisit);
+            if (index >= 0)
+                Visits[index] = newVisit;
+
             ClearInputs();
         }
 
@@ -164,13 +173,15 @@ namespace TouristDestinations_Component1.ViewModels
         private void OnUndo()
         {
             commandManager.Undo();
-            Refresh(repository);
+            Visits = new ObservableCollection<DestinationVisit>(repository.GetAll());
+            OnPropertyChanged(nameof(Visits));
         }
 
         private void OnRedo()
         {
             commandManager.Redo();
-            Refresh(repository);
+            Visits = new ObservableCollection<DestinationVisit>(repository.GetAll());
+            OnPropertyChanged(nameof(Visits));
         }
 
         private void ClearInputs()

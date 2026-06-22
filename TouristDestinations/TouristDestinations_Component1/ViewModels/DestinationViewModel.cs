@@ -19,7 +19,16 @@ namespace TouristDestinations_Component1.ViewModels
         public TouristDestination SelectedDestination
         {
             get => selectedDestination;
-            set => SetProperty(ref selectedDestination, value);
+            set
+            {
+                SetProperty(ref selectedDestination, value);
+                if (value != null)
+                {
+                    InputName = value.Name;
+                    InputCountry = value.Country;
+                    InputType = value.Type;
+                }
+            }
         }
 
         private string searchText;
@@ -74,13 +83,6 @@ namespace TouristDestinations_Component1.ViewModels
             RedoCommand = new MyICommand(OnRedo);
         }
 
-        public void Refresh(IDestinationRepository repository)
-        {
-            this.repository = repository;
-            Destinations = new ObservableCollection<TouristDestination>(repository.GetAll());
-            OnPropertyChanged(nameof(Destinations));
-        }
-
         private void Search()
         {
             var all = repository.GetAll();
@@ -115,9 +117,13 @@ namespace TouristDestinations_Component1.ViewModels
         {
             if (SelectedDestination == null || !Validate()) return;
             var oldDestination = SelectedDestination;
-            var newDestination = new TouristDestination(InputName, InputCountry, InputType);
+            var newDestination = new TouristDestination(oldDestination.Id, InputName, InputCountry, InputType);
             commandManager.ExecuteCommand(new EditDestinationCommand(newDestination, oldDestination, repository));
-            Refresh(repository);
+
+            int index = Destinations.IndexOf(oldDestination);
+            if (index >= 0)
+                Destinations[index] = newDestination;
+
             ClearInputs();
         }
 
@@ -132,13 +138,15 @@ namespace TouristDestinations_Component1.ViewModels
         private void OnUndo()
         {
             commandManager.Undo();
-            Refresh(repository);
+            Destinations = new ObservableCollection<TouristDestination>(repository.GetAll());
+            OnPropertyChanged(nameof(Destinations));
         }
 
         private void OnRedo()
         {
             commandManager.Redo();
-            Refresh(repository);
+            Destinations = new ObservableCollection<TouristDestination>(repository.GetAll());
+            OnPropertyChanged(nameof(Destinations));
         }
 
         private void ClearInputs()

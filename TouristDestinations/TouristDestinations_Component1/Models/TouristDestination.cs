@@ -26,5 +26,13 @@ namespace TouristDestinations_Component1.Models
             Country = country;
             Type = type;
         }
+
+        public TouristDestination(Guid id, string name, string country, string type)
+        {
+            Id = id;
+            Name = name;
+            Country = country;
+            Type = type;
+        }
     }
 }
