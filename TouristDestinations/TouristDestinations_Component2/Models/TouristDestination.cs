@@ -7,13 +7,13 @@ namespace TouristDestinations_Component2.Models
     public class TouristDestination
     {
         [DataMember]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; set; }
         [DataMember]
-        public string Country { get; private set; }
+        public string Country { get; set; }
         [DataMember]
-        public string Type { get; private set; }
+        public string Type { get; set; }
 
         public TouristDestination()
         {

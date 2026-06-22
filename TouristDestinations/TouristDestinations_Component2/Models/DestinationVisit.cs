@@ -7,17 +7,17 @@ namespace TouristDestinations_Component2.Models
     public class DestinationVisit
     {
         [DataMember]
-        public Guid DestinationId { get; private set; }
+        public Guid DestinationId { get; set; }
         [DataMember]
-        public DateTime DateOfVisit { get; private set; }
+        public DateTime DateOfVisit { get; set; }
         [DataMember]
-        public int NumberOfVisitors { get; private set; }
+        public int NumberOfVisitors { get; set; }
         [DataMember]
-        public int DurationOfVisit { get; private set; }
+        public int DurationOfVisit { get; set; }
         [DataMember]
-        public double Revenue { get; private set; }
+        public double Revenue { get; set; }
         [DataMember]
-        public VisitStateType StateType { get; private set; }
+        public VisitStateType StateType { get; set; }
 
         public DestinationVisit()
         {
