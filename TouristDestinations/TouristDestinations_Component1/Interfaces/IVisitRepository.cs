@@ -8,7 +8,7 @@ namespace TouristDestinations_Component1.Interfaces
     {
         void Add(DestinationVisit visit);
 
-        void Edit(DestinationVisit visit);
+        void Edit(DestinationVisit oldVisit, DestinationVisit newVisit);
 
         void Delete(Guid destinationId, DateTime dateOfVisit);
 

@@ -5,7 +5,7 @@ using TouristDestinations_Component1.States;
 
 namespace TouristDestinations_Component1.Models
 {
-    [DataContract]
+    [DataContract(Namespace = "http://touristdestinations.com")]
     public class DestinationVisit
     {
         [DataMember]
@@ -26,6 +26,8 @@ namespace TouristDestinations_Component1.Models
 
         public DestinationVisit()
         {
+            State = new PopularState(this);
+            StateType = VisitStateType.Popular;
         }
 
         public DestinationVisit(Guid destinationId, DateTime dateOfVisit, int numberOfVisitors, int durationOfVisit, double revenue)

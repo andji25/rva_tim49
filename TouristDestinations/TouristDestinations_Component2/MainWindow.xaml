@@ -14,11 +14,17 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <GroupBox Grid.Row="0" Header="Filter" Margin="0,0,0,10">
+        
+        <Button Grid.Row="0" Content="Load from Component1" 
+            Command="{Binding LoadFromServiceCommand}" 
+            HorizontalAlignment="Left"
+            Width="160" Margin="0,0,0,10"/>
+        
+        <GroupBox Grid.Row="1" Header="Filter" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -45,7 +51,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Header="Statistics Method" Margin="0,0,0,10">
+        <GroupBox Grid.Row="2" Header="Statistics Method" Margin="0,0,0,10">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <ComboBox ItemsSource="{Binding Strategies}"
                           SelectedItem="{Binding SelectedStrategy}"
@@ -54,7 +60,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Results" Margin="0,0,0,10">
+        <GroupBox Grid.Row="3" Header="Results" Margin="0,0,0,10">
             <TextBox Text="{Binding Result}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
@@ -62,7 +68,7 @@
                      Margin="5"/>
         </GroupBox>
         
-        <Button Grid.Row="3" Content="Export to CSV"
+        <Button Grid.Row="4" Content="Export to CSV"
                 Command="{Binding ExportCommand}"
                 HorizontalAlignment="Right"
                 Width="120"/>

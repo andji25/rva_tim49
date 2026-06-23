@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace TouristDestinations_Component2.Models
 {
-    [DataContract]
+    [DataContract(Namespace = "http://touristdestinations.com")]
     public class DestinationVisit
     {
         [DataMember]

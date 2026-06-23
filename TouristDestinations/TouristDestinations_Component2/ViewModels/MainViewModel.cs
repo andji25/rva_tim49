@@ -75,7 +75,9 @@ namespace TouristDestinations_Component2.ViewModels
             };
 
             IWriter writer = new CsvWriter("results.csv");
-            statisticsService = new StatisticsService(new VisitAdapter(allVisits), writer);
+            statisticsService = new StatisticsService(
+                new VisitAdapter(allVisits, new List<TouristDestination>(), FromDate, ToDate),
+                writer);
 
             CalculateCommand = new MyICommand(OnCalculate);
             ExportCommand = new MyICommand(OnExport);
@@ -86,7 +88,9 @@ namespace TouristDestinations_Component2.ViewModels
         {
             allVisits = visits;
             Destinations = new ObservableCollection<TouristDestination>(destinations);
-            statisticsService = new StatisticsService(new VisitAdapter(allVisits), new CsvWriter("results.csv"));
+            statisticsService = new StatisticsService(
+                new VisitAdapter(allVisits, new List<TouristDestination>(Destinations), FromDate, ToDate),
+                new CsvWriter("results.csv"));
             OnPropertyChanged(nameof(Destinations));
         }
 
@@ -104,7 +108,7 @@ namespace TouristDestinations_Component2.ViewModels
             if (string.IsNullOrEmpty(SelectedStrategy)) return;
 
             var filtered = FilterVisits();
-            var adapter = new VisitAdapter(filtered);
+            var adapter = new VisitAdapter(filtered, new List<TouristDestination>(Destinations), FromDate, ToDate);
             statisticsService = new StatisticsService(adapter, new CsvWriter("results.csv"));
 
             switch (SelectedStrategy)
@@ -120,7 +124,21 @@ namespace TouristDestinations_Component2.ViewModels
                     break;
             }
 
-            Result = statisticsService.Calculate();
+            var data = adapter.GetData();
+            Result = FormatData(data) + "\n" + statisticsService.Calculate();
+        }
+
+        private string FormatData(Dictionary<string, List<DestinationVisit>> data)
+        {
+            string result = "";
+            foreach (var entry in data)
+            {
+                result += $"{entry.Key}: ";
+                result += string.Join(", ", entry.Value.Select(v =>
+                    $"({v.DateOfVisit:yyyy-MM-dd})->[{v.NumberOfVisitors}, {v.DurationOfVisit}, {v.Revenue}]"));
+                result += "\n";
+            }
+            return result;
         }
 
         private void OnExport()
@@ -131,11 +149,18 @@ namespace TouristDestinations_Component2.ViewModels
 
         public void LoadFromService()
         {
-            VisitServiceClient client = new VisitServiceClient();
-            var visits = client.GetVisits();
-            var destinations = client.GetDestinations();
-            LoadData(visits, destinations);
-            client.Close();
+            try
+            {
+                VisitServiceClient client = new VisitServiceClient();
+                var visits = client.GetVisits();
+                var destinations = client.GetDestinations();
+                LoadData(visits, destinations);
+                client.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
     }
 }

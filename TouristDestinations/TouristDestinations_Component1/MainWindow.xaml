@@ -29,20 +29,24 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="97*"/>
+                            <ColumnDefinition Width="677*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBox Grid.Row="0" Margin="5"
-                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Grid.Row="0" Margin="5,5,5,5"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
 
-                        <DataGrid Grid.Row="1" Margin="5"
+                        <DataGrid Grid.Row="1" Margin="5,5,5,5"
                                   ItemsSource="{Binding Destinations}"
                                   SelectedItem="{Binding SelectedDestination}"
                                   AutoGenerateColumns="False"
-                                  IsReadOnly="True">
+                                  IsReadOnly="True" Grid.ColumnSpan="2">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                 <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
@@ -50,7 +54,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5,5,5,5" Grid.ColumnSpan="2">
                             <Button Content="Undo" Command="{Binding UndoCommand}" Width="60" Margin="5"/>
                             <Button Content="Redo" Command="{Binding RedoCommand}" Width="60" Margin="5"/>
                         </StackPanel>
@@ -99,7 +103,7 @@
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Destination" Binding="{Binding DestinationId}" Width="*"/>
+                                <DataGridTextColumn Header="Destination" Binding="{Binding DestinationName}" Width="*"/>
                                 <DataGridTextColumn Header="Date" Binding="{Binding DateOfVisit, StringFormat=dd.MM.yyyy}" Width="*"/>
                                 <DataGridTextColumn Header="Visitors" Binding="{Binding NumberOfVisitors}" Width="*"/>
                                 <DataGridTextColumn Header="Duration" Binding="{Binding DurationOfVisit}" Width="*"/>
@@ -141,7 +145,27 @@
             </TabItem>
 
             <TabItem Header="Chart" DataContext="{Binding ChartViewModel}">
-                <lvc:PieChart Series="{Binding Series}" Margin="10"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <lvc:PieChart Grid.Row="0" Series="{Binding Series}" 
+                      TooltipPosition="Hidden"
+                      Margin="10"/>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Rectangle Fill="Green" Width="15" Height="15" Margin="5,0"/>
+                        <TextBlock Text="Popular" Margin="0,0,15,0"/>
+                        <Rectangle Fill="Blue" Width="15" Height="15" Margin="5,0"/>
+                        <TextBlock Text="Stable" Margin="0,0,15,0"/>
+                        <Rectangle Fill="Orange" Width="15" Height="15" Margin="5,0"/>
+                        <TextBlock Text="Decline" Margin="0,0,15,0"/>
+                        <Rectangle Fill="Red" Width="15" Height="15" Margin="5,0"/>
+                        <TextBlock Text="OffSeason" Margin="0,0,15,0"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
 
         </TabControl>

@@ -2,7 +2,7 @@
 
 namespace TouristDestinations_Component1.Models
 {
-    [DataContract]
+    [DataContract(Namespace = "http://touristdestinations.com")]
     public enum VisitStateType
     {
         [EnumMember]

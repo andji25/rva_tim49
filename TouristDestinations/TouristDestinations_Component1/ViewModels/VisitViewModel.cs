@@ -17,11 +17,11 @@ namespace TouristDestinations_Component1.ViewModels
         private CommandManager commandManager;
         private VisitTracker visitTracker;
 
-        public ObservableCollection<DestinationVisit> Visits { get; set; }
+        public ObservableCollection<VisitDisplayModel> Visits { get; set; }
         public ObservableCollection<TouristDestination> Destinations { get; set; }
 
-        private DestinationVisit selectedVisit;
-        public DestinationVisit SelectedVisit
+        private VisitDisplayModel selectedVisit;
+        public VisitDisplayModel SelectedVisit
         {
             get => selectedVisit;
             set
@@ -104,8 +104,8 @@ namespace TouristDestinations_Component1.ViewModels
             this.commandManager = commandManager;
             this.visitTracker = visitTracker;
 
-            Visits = new ObservableCollection<DestinationVisit>(repository.GetAll());
             Destinations = new ObservableCollection<TouristDestination>(destinationRepository.GetAll());
+            Visits = CreateVisitDisplay();
 
             InputDateOfVisit = DateTime.Today;
 
@@ -121,12 +121,27 @@ namespace TouristDestinations_Component1.ViewModels
         {
             var all = repository.GetAll();
             var filtered = all.Where(v =>
-                string.IsNullOrEmpty(SearchText) ||
-                v.DestinationId.ToString().Contains(SearchText) ||
-                v.StateType.ToString().ToLower().Contains(SearchText.ToLower())
-            ).ToList();
+            {
+                var destination = Destinations.FirstOrDefault(d => d.Id == v.DestinationId);
+                string destName = destination?.Name ?? "";
+                return string.IsNullOrEmpty(SearchText) ||
+                       destName.ToLower().Contains(SearchText.ToLower()) ||
+                       v.StateType.ToString().ToLower().Contains(SearchText.ToLower()) ||
+                       v.NumberOfVisitors.ToString().Contains(SearchText) ||
+                       v.DurationOfVisit.ToString().Contains(SearchText) ||
+                       v.Revenue.ToString().Contains(SearchText) ||
+                       v.DateOfVisit.ToString("dd.MM.yyyy").Contains(SearchText);
+            }).ToList();
 
-            Visits = new ObservableCollection<DestinationVisit>(filtered);
+            var result = new ObservableCollection<VisitDisplayModel>();
+            foreach (var visit in filtered)
+            {
+                var destination = Destinations.FirstOrDefault(d => d.Id == visit.DestinationId);
+                string name = destination?.Name ?? visit.DestinationId.ToString();
+                result.Add(new VisitDisplayModel(visit, name));
+            }
+
+            Visits = result;
             OnPropertyChanged(nameof(Visits));
         }
 
@@ -145,42 +160,41 @@ namespace TouristDestinations_Component1.ViewModels
             var visit = new DestinationVisit(SelectedDestination.Id, InputDateOfVisit, InputNumberOfVisitors, InputDurationOfVisit, InputRevenue);
             commandManager.ExecuteCommand(new AddVisitCommand(visit, repository));
             visitTracker.AddVisit(visit);
-            Visits.Add(visit);
+            Visits = CreateVisitDisplay();
+            OnPropertyChanged(nameof(Visits));
             ClearInputs();
         }
         private void OnEdit()
         {
             if (SelectedVisit == null || !Validate()) return;
-            var oldVisit = SelectedVisit;
+            var oldVisit = SelectedVisit.Visit;
             var newVisit = new DestinationVisit(oldVisit.DestinationId, InputDateOfVisit, InputNumberOfVisitors, InputDurationOfVisit, InputRevenue);
             commandManager.ExecuteCommand(new EditVisitCommand(newVisit, oldVisit, repository));
-
-            int index = Visits.IndexOf(oldVisit);
-            if (index >= 0)
-                Visits[index] = newVisit;
-
+            Visits = CreateVisitDisplay();
+            OnPropertyChanged(nameof(Visits));
             ClearInputs();
         }
 
         private void OnDelete()
         {
             if (SelectedVisit == null) return;
-            commandManager.ExecuteCommand(new DeleteVisitCommand(SelectedVisit, repository));
-            Visits.Remove(SelectedVisit);
+            commandManager.ExecuteCommand(new DeleteVisitCommand(SelectedVisit.Visit, repository));
+            Visits = CreateVisitDisplay();
+            OnPropertyChanged(nameof(Visits));
             ClearInputs();
         }
 
         private void OnUndo()
         {
             commandManager.Undo();
-            Visits = new ObservableCollection<DestinationVisit>(repository.GetAll());
+            Visits = CreateVisitDisplay();
             OnPropertyChanged(nameof(Visits));
         }
 
         private void OnRedo()
         {
             commandManager.Redo();
-            Visits = new ObservableCollection<DestinationVisit>(repository.GetAll());
+            Visits = CreateVisitDisplay();
             OnPropertyChanged(nameof(Visits));
         }
 
@@ -191,6 +205,45 @@ namespace TouristDestinations_Component1.ViewModels
             InputRevenue = 0;
             InputDateOfVisit = DateTime.Today;
             SelectedDestination = null;
+        }
+
+        public void RefreshDestinations()
+        {
+            Destinations = new ObservableCollection<TouristDestination>(destinationRepository.GetAll());
+            OnPropertyChanged(nameof(Destinations));
+            Visits = CreateVisitDisplay();
+            OnPropertyChanged(nameof(Visits));
+        }
+
+        public void RefreshVisits()
+        {
+            var currentSelected = SelectedVisit;
+            Visits = CreateVisitDisplay();
+            OnPropertyChanged(nameof(Visits));
+            if (currentSelected != null)
+            {
+                SelectedVisit = Visits.FirstOrDefault(v =>
+                    v.DestinationId == currentSelected.DestinationId &&
+                    v.DateOfVisit == currentSelected.DateOfVisit);
+            }
+        }
+
+        public string GetDestinationName(Guid destinationId)
+        {
+            var destination = Destinations.FirstOrDefault(d => d.Id == destinationId);
+            return destination?.Name ?? destinationId.ToString();
+        }
+
+        private ObservableCollection<VisitDisplayModel> CreateVisitDisplay()
+        {
+            var result = new ObservableCollection<VisitDisplayModel>();
+            foreach (var visit in repository.GetAll())
+            {
+                var destination = Destinations.FirstOrDefault(d => d.Id == visit.DestinationId);
+                string name = destination?.Name ?? visit.DestinationId.ToString();
+                result.Add(new VisitDisplayModel(visit, name));
+            }
+            return result;
         }
     }
 }

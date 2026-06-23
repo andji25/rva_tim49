@@ -29,16 +29,16 @@ namespace TouristDestinations_Component1.Services
 			observers.Remove(observer);
 		}
 
-		public void NotifyObservers()
-		{
+		public void NotifyObservers(DestinationVisit visit)
+        {
             foreach (IObserver observer in observers)
-                observer.Update(visits[visits.Count - 1]);
+                observer.Update(visit);
         }
 
-		public void AddVisit(DestinationVisit visit)
+        public void AddVisit(DestinationVisit visit)
 		{
             visits.Add(visit);
-            NotifyObservers();
+            NotifyObservers(visit);
         }
 	}
 }

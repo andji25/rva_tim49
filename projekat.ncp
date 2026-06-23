@@ -122,7 +122,7 @@
         <Size width="226" height="164" />
         <Collapsed>False</Collapsed>
         <Member type="Method">void Add(DestinationVisit visit)</Member>
-        <Member type="Method">void Edit(DestinationVisit visit)</Member>
+        <Member type="Method">void Edit(DestinationVisit oldVisit, DestinationVisit newVisit)</Member>
         <Member type="Method">void Delete(Guid destinationId, DateTime dateOfVisit)</Member>
         <Member type="Method">List&lt;DestinationVisit&gt; GetAll()</Member>
         <Member type="Method">void Load()</Member>
@@ -278,14 +278,14 @@
         <Name>VisitTracker</Name>
         <Access>Public</Access>
         <Location left="1102" top="70" />
-        <Size width="223" height="216" />
+        <Size width="248" height="216" />
         <Collapsed>False</Collapsed>
         <Member type="Field">List&lt;IObserver&gt; observers</Member>
         <Member type="Field">List&lt;DestinationVisit&gt; visits</Member>
         <Member type="Field">IVisitRepository repository</Member>
         <Member type="Method">public void Register(IObserver observer)</Member>
         <Member type="Method">public void Unregister(IObserver observer)</Member>
-        <Member type="Method">public void NotifyObservers()</Member>
+        <Member type="Method">public void NotifyObservers(DestinationVisit visit)</Member>
         <Member type="Method">public void AddVisit(DestinationVisit visit)</Member>
         <Modifier>None</Modifier>
       </Entity>

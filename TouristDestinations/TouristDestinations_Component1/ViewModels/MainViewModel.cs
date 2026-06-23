@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using System.ServiceModel;
+using System.Windows.Threading;
 using TouristDestinations_Component1.Helpers;
 using TouristDestinations_Component1.Interfaces;
 using TouristDestinations_Component1.Models;
@@ -13,9 +14,11 @@ namespace TouristDestinations_Component1.ViewModels
     public class MainViewModel : BindableBase
     {
         private ServiceHost serviceHost;
+
         public DestinationViewModel DestinationViewModel { get; set; }
         public VisitViewModel VisitViewModel { get; set; }
-
+        public ChartViewModel ChartViewModel { get; set; }
+        
         private IDestinationRepository destinationRepository;
         private IVisitRepository visitRepository;
 
@@ -28,8 +31,6 @@ namespace TouristDestinations_Component1.ViewModels
             get => selectedFormat;
             set => SetProperty(ref selectedFormat, value);
         }
-
-        public ChartViewModel ChartViewModel { get; set; }
 
         public MyICommand LoadCommand { get; set; }
         public MyICommand SaveCommand { get; set; }
@@ -59,34 +60,44 @@ namespace TouristDestinations_Component1.ViewModels
 
         public void Load()
         {
-            if (SelectedFormat == "XML")
+            try
             {
-                destinationRepository = new XmlDestinationRepository("destinations.xml");
-                visitRepository = new XmlVisitRepository("visits.xml");
+                if (SelectedFormat == "XML")
+                {
+                    destinationRepository = new XmlDestinationRepository("destinations.xml");
+                    visitRepository = new XmlVisitRepository("visits.xml");
+                }
+                else
+                {
+                    destinationRepository = new JsonDestinationRepository("destinations.json");
+                    visitRepository = new JsonVisitRepository("visits.json");
+                }
+
+                visitTracker = new VisitTracker(visitRepository);
+                SeedIfEmpty();
+
+                DestinationViewModel = new DestinationViewModel(destinationRepository, commandManager);
+                VisitViewModel = new VisitViewModel(visitRepository, destinationRepository, commandManager, visitTracker);
+                ChartViewModel = new ChartViewModel();
+
+                IObserver chartDisplay = new ChartDisplay(visitRepository, ChartViewModel);
+                IObserver textDisplay = new TextDisplay(VisitViewModel);
+                visitTracker.Register(chartDisplay);
+                visitTracker.Register(textDisplay);
+
+                DestinationViewModel.DestinationsChanged += () => VisitViewModel.RefreshDestinations();
+
+                OnPropertyChanged(nameof(DestinationViewModel));
+                OnPropertyChanged(nameof(VisitViewModel));
+                OnPropertyChanged(nameof(ChartViewModel));
+
+                StartWcfService();
+                StartStateSimulation();
             }
-            else
+            catch (Exception ex)
             {
-                destinationRepository = new JsonDestinationRepository("destinations.json");
-                visitRepository = new JsonVisitRepository("visits.json");
+                System.Windows.MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
-
-            visitTracker = new VisitTracker(visitRepository);
-            SeedIfEmpty();
-
-            DestinationViewModel = new DestinationViewModel(destinationRepository, commandManager);
-            VisitViewModel = new VisitViewModel(visitRepository, destinationRepository, commandManager, visitTracker);
-            ChartViewModel = new ChartViewModel();
-
-            IObserver chartDisplay = new ChartDisplay(visitRepository, ChartViewModel);
-            IObserver textDisplay = new TextDisplay(VisitViewModel);
-            visitTracker.Register(chartDisplay);
-            visitTracker.Register(textDisplay);
-            
-            OnPropertyChanged(nameof(DestinationViewModel));
-            OnPropertyChanged(nameof(VisitViewModel));
-            OnPropertyChanged(nameof(ChartViewModel));
-
-            StartWcfService();
         }
 
         private void SeedIfEmpty()
@@ -109,17 +120,53 @@ namespace TouristDestinations_Component1.ViewModels
 
         private void StartWcfService()
         {
-            serviceHost = new ServiceHost(new VisitService(visitRepository, destinationRepository),
-                                          new Uri("http://localhost:8080/VisitService"));
-            serviceHost.AddServiceEndpoint(typeof(IVisitService),
-                                           new BasicHttpBinding(),
-                                           "http://localhost:8080/VisitService");
-            serviceHost.Open();
+            try
+            {
+                serviceHost = new ServiceHost(new VisitService(visitRepository, destinationRepository),
+                                              new Uri("http://localhost:8080/VisitService"));
+                serviceHost.AddServiceEndpoint(typeof(IVisitService),
+                                               new BasicHttpBinding(),
+                                               "http://localhost:8080/VisitService");
+                serviceHost.Open();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
         }
 
         public void StopWcfService()
         {
             serviceHost?.Close();
+        }
+
+        private DispatcherTimer stateTimer;
+
+        private void StartStateSimulation()
+        {
+            stateTimer = new DispatcherTimer();
+            stateTimer.Interval = TimeSpan.FromSeconds(5);
+            stateTimer.Tick += OnStateTick;
+            stateTimer.Start();
+        }
+
+        private void OnStateTick(object sender, EventArgs e)
+        {
+            try
+            {
+                var visits = visitRepository.GetAll();
+                foreach (var visit in visits)
+                    visit.ChangeState();
+
+                if (visits.Count > 0)
+                    visitTracker.NotifyObservers(visits[visits.Count - 1]);
+
+                VisitViewModel.RefreshVisits();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
     }
 }

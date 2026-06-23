@@ -27,11 +27,12 @@ namespace TouristDestinations_Component1.Repositories
             Save();
         }
 
-        public void Edit(DestinationVisit visit)
+        public void Edit(DestinationVisit oldVisit, DestinationVisit newVisit)
         {
-            int index = visits.FindIndex(v => v.DestinationId == visit.DestinationId);
-            if (index != -1) {
-                visits[index] = visit;
+            int index = visits.FindIndex(v => v.DestinationId == oldVisit.DestinationId && v.DateOfVisit == oldVisit.DateOfVisit);
+            if (index != -1)
+            {
+                visits[index] = newVisit;
                 Save();
             }
         }

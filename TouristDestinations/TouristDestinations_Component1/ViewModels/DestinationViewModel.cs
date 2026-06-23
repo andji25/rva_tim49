@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using TouristDestinations_Component1.Commands;
 using TouristDestinations_Component1.Helpers;
@@ -69,6 +70,7 @@ namespace TouristDestinations_Component1.ViewModels
         public MyICommand UndoCommand { get; set; }
         public MyICommand RedoCommand { get; set; }
 
+        public event Action DestinationsChanged;
         public DestinationViewModel(IDestinationRepository repository, CommandManager commandManager)
         {
             this.repository = repository;
@@ -110,6 +112,7 @@ namespace TouristDestinations_Component1.ViewModels
             var destination = new TouristDestination(InputName, InputCountry, InputType);
             commandManager.ExecuteCommand(new AddDestinationCommand(destination, repository));
             Destinations.Add(destination);
+            DestinationsChanged?.Invoke();
             ClearInputs();
         }
 
@@ -119,11 +122,10 @@ namespace TouristDestinations_Component1.ViewModels
             var oldDestination = SelectedDestination;
             var newDestination = new TouristDestination(oldDestination.Id, InputName, InputCountry, InputType);
             commandManager.ExecuteCommand(new EditDestinationCommand(newDestination, oldDestination, repository));
-
             int index = Destinations.IndexOf(oldDestination);
             if (index >= 0)
                 Destinations[index] = newDestination;
-
+            DestinationsChanged?.Invoke();
             ClearInputs();
         }
 
@@ -132,6 +134,7 @@ namespace TouristDestinations_Component1.ViewModels
             if (SelectedDestination == null) return;
             commandManager.ExecuteCommand(new DeleteDestinationCommand(SelectedDestination, repository));
             Destinations.Remove(SelectedDestination);
+            DestinationsChanged?.Invoke();
             ClearInputs();
         }
 

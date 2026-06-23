@@ -16,12 +16,12 @@ namespace TouristDestinations_Component1.Commands
 
         public override void Execute()
         {
-            repository.Edit(visit);
+            repository.Edit(oldVisit, visit);
         }
 
         public override void Undo()
         {
-            repository.Edit(oldVisit);
+            repository.Edit(visit, oldVisit);
         }
     }
 }
