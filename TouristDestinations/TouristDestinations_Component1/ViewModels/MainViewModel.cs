@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
 using System.ServiceModel;
-using System.Windows.Threading;
 using TouristDestinations_Component1.Helpers;
 using TouristDestinations_Component1.Interfaces;
 using TouristDestinations_Component1.Models;

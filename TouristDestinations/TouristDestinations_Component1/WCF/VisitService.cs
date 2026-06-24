@@ -19,22 +19,12 @@ namespace TouristDestinations_Component1.WCF
 
         public List<DestinationVisit> GetVisits()
         {
-            var data = visitRepository.GetAll();
-
-            System.Windows.MessageBox.Show(
-                $"SERVER GetVisits -> {data.Count}");
-
-            return data;
+            return visitRepository.GetAll();
         }
 
         public List<TouristDestination> GetDestinations()
         {
-            var data = destinationRepository.GetAll();
-
-            System.Windows.MessageBox.Show(
-                $"SERVER GetDestinations -> {data.Count}");
-
-            return data;
+            return destinationRepository.GetAll();
         }
     }
 }
