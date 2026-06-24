@@ -18,7 +18,7 @@ namespace TouristDestinations_Component1.ViewModels
         public DestinationViewModel DestinationViewModel { get; set; }
         public VisitViewModel VisitViewModel { get; set; }
         public ChartViewModel ChartViewModel { get; set; }
-        
+
         private IDestinationRepository destinationRepository;
         private IVisitRepository visitRepository;
 
@@ -45,6 +45,7 @@ namespace TouristDestinations_Component1.ViewModels
             LoadCommand = new MyICommand(Load);
             SaveCommand = new MyICommand(Save);
             SelectFormatCommand = new MyICommand<string>(OnSelectFormat);
+
         }
 
         private void OnSelectFormat(string format)
@@ -134,7 +135,6 @@ namespace TouristDestinations_Component1.ViewModels
                 System.Windows.MessageBox.Show(ex.Message);
             }
         }
-
         public void StopWcfService()
         {
             serviceHost?.Close();

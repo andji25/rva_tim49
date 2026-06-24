@@ -4,27 +4,69 @@
         Title="Tourist Destinations - Statistics" Height="600" Width="900">
 
     <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="Padding" Value="10,5"/>
-        </Style>
-    </Window.Resources>
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#2E4057"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#D4A017"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#F8F8F8"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#F8F8F8"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Background" Value="#F8F8F8"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/background3.jpeg"
+                    Stretch="UniformToFill"
+                    Opacity="0.55"/>
+        </Grid.Background>
+
+        <Border Background="Transparent"
+            BorderBrush="#D4A017"
+            BorderThickness="2"
+            CornerRadius="12"
+            Margin="10">
+
+            <Grid>
+                <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <Button Grid.Row="0" Content="Load from Component1" 
             Command="{Binding LoadFromServiceCommand}" 
             HorizontalAlignment="Left"
             Width="160" Margin="0,0,0,10"/>
-        
-        <GroupBox Grid.Row="1" Header="Filter" Margin="0,0,0,10">
+
+                <GroupBox Grid.Row="1" Header="Filter" Margin="0,0,0,10" Background="#99F7EFC8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -51,7 +93,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Statistics Method" Margin="0,0,0,10">
+                <GroupBox Grid.Row="2" Header="Statistics Method" Margin="0,0,0,10" Background="#99F7EFC8">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <ComboBox ItemsSource="{Binding Strategies}"
                           SelectedItem="{Binding SelectedStrategy}"
@@ -60,17 +102,20 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="3" Header="Results" Margin="0,0,0,10">
+                <GroupBox Grid.Row="3" Header="Results" Margin="0,0,0,10" Background="#99F7EFC8">
             <TextBox Text="{Binding Result}"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Auto"
                      Margin="5"/>
         </GroupBox>
-        
+
         <Button Grid.Row="4" Content="Export to CSV"
                 Command="{Binding ExportCommand}"
                 HorizontalAlignment="Right"
                 Width="120"/>
+            </Grid>
+
+        </Border>
     </Grid>
 </Window>

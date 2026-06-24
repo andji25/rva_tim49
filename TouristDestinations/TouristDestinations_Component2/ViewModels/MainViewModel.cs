@@ -82,10 +82,24 @@ namespace TouristDestinations_Component2.ViewModels
             CalculateCommand = new MyICommand(OnCalculate);
             ExportCommand = new MyICommand(OnExport);
             LoadFromServiceCommand = new MyICommand(LoadFromService);
+
+            try
+            {
+                LoadFromService();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(
+                    "Error loading data from service:\n" + ex.Message,
+                    "WCF Error");
+            }
         }
 
         public void LoadData(List<DestinationVisit> visits, List<TouristDestination> destinations)
         {
+            System.Windows.MessageBox.Show(
+                $"Visits = {visits.Count}\nDestinations = {destinations.Count}");
+
             allVisits = visits;
             Destinations = new ObservableCollection<TouristDestination>(destinations);
             statisticsService = new StatisticsService(
